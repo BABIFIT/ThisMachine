@@ -12,7 +12,7 @@ browser tab on that same machine.
 ## Quick start
 
 ```bash
-git clone https://github.com/<you>/thismachine.git
+git clone https://github.com/BABIFIT/thismachine.git
 cd thismachine
 ./start.sh
 ```
