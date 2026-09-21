@@ -110,7 +110,10 @@ ThisMachine executes shell commands as the user running it, with no
 authentication. That is the point of the tool, and it is why it binds to
 loopback only. Do not set `TERMSITE_HOST` to a non-loopback address, and do not
 expose the port through a reverse proxy or tunnel — anyone who can reach it has
-a shell on your machine.
+a shell on your machine. Also, this app has not been reviewed by a professional 
+or anything, so it should not be used on any systems with sensitive data on 
+them. It is mostly intended to help introduce the Linux command line in a 
+somewhat temporary environment.
 
 ---
 
