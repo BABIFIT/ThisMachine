@@ -953,6 +953,12 @@ function inBubble(isErr) {
   return b;
 }
 
+function clearScreen() {
+  feed.innerHTML = '';   // remove every message bubble
+  lastShownTs = null;    // restart the 5-minute timestamp window
+  input.focus();
+}
+
 // Create an xterm.js terminal inside a bubble, inserted ABOVE the thinking dots.
 // Sized to fit the viewport so wide apps (claude, top) aren't clipped on the right.
 const TERM_FONT = "'SF Mono','Menlo','Monaco','Courier New',monospace";
@@ -1442,16 +1448,18 @@ async function sendCmd() {
   const cmd = input.value.trim();
   if (!cmd) return;
 
-  // Detect shell exit commands so we can close the tab when they complete.
-  const isExit = /^(exit|logout)(\s+\d+)?\s*$/.test(cmd);
-
-  input.value = '';
-  // Add to in-memory history (skip consecutive duplicate)
-  if (cmdHistory.length === 0 || cmdHistory[cmdHistory.length - 1] !== cmd) {
-    cmdHistory.push(cmd);
+  // Intercept "clear": wipe the chat feed instead of running the shell's clear.
+  if (/^clear\s*$/.test(cmd)) {
+    input.value = '';
+    if (cmdHistory.length === 0 || cmdHistory[cmdHistory.length - 1] !== cmd) {
+      cmdHistory.push(cmd);      // keep ↑-arrow recall, like a real shell
+    }
+    histIdx = -1; histDraft = '';
+    clearScreen();
+    return;                      // don't echo a bubble or call /run
   }
-  histIdx   = -1;
-  histDraft = '';
+
+  const isExit = /^(exit|logout)(\s+\d+)?\s*$/.test(cmd);
 
   maybeTimestamp(Date.now());
   outBubble(cmd);
