@@ -1452,11 +1452,10 @@ async function sendCmd() {
   if (/^clear\s*$/.test(cmd)) {
     input.value = '';
     if (cmdHistory.length === 0 || cmdHistory[cmdHistory.length - 1] !== cmd) {
-      cmdHistory.push(cmd);      // keep ↑-arrow recall, like a real shell
-    }
+      cmdHistory.push(cmd);
     histIdx = -1; histDraft = '';
     clearScreen();
-    return;                      // don't echo a bubble or call /run
+    return;
   }
 
   const isExit = /^(exit|logout)(\s+\d+)?\s*$/.test(cmd);
